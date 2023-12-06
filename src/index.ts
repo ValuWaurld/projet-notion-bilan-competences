@@ -1,8 +1,12 @@
 import 'phaser';
 
+// Import scenes
 import { BootScene } from './scenes/BootScene';
 import { PreloadScene } from './scenes/PreloadScene';
 import { TitleScene } from './scenes/TitleScene';
+
+// Import other classes
+import { Align } from './utils/Align';
 
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
@@ -21,4 +25,5 @@ export class Game extends Phaser.Game {
 window.onload = () => {
     const game = new Game(config);
     game.scale.autoCenter = Phaser.Scale.CENTER_BOTH;
+    Align.setGame(game);
 };

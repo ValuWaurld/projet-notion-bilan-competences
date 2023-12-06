@@ -1,4 +1,5 @@
 import 'phaser';
+import { Align } from '../utils/Align';
 
 export class TitleScene extends Phaser.Scene {
 
@@ -7,11 +8,12 @@ export class TitleScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('hello', require('../assets/hello.gif'));
+
     }
 
     create() {
-        this.add.image(400, 300, 'hello');
+        const forest = this.add.image(0, 0, 'forest');
+        Align.scaleToGameW(forest, 1);
     }
 
 }
