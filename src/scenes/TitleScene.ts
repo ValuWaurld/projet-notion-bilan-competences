@@ -24,5 +24,11 @@ export class TitleScene extends Phaser.Scene {
         } else {
             forest.x = (this.cameras.main.width - forest.width * scale) / 2;
         }
+    
+        // Ajouter un événement de clic pour naviguer vers la scène de jeu
+        forest.setInteractive({ useHandCursor: true });
+        forest.on('pointerdown', () => {
+            this.scene.start('GameScene');
+        });
     }
 }
