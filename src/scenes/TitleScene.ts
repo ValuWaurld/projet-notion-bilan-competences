@@ -41,7 +41,7 @@ export class TitleScene extends BaseScene {
         const playButton = this.add.sprite(this.cameras.main.centerX, 300, "playButton").setInteractive();
         playButton.setOrigin(0.5, 0.5);
         playButton.on("pointerdown", () => {
-            console.log("Play button clicked");
+            this.scene.start('GameScene');
         });
 
         const creditsButton = this.add.sprite(this.cameras.main.centerX, 500, "creditsButton").setInteractive();
