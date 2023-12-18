@@ -2,20 +2,20 @@ import 'phaser';
 
 // Import scenes
 import { TitleScene } from './scenes/TitleScene';
-import { GameScene } from './scenes/GameScene';
 import { InterviewScene } from './scenes/InterviewScene';
 import { MoralChoiceScene } from './scenes/MoralChoiceScene';
 import { EndScene } from './scenes/EndScene';
 
 // Import other classes
 import { Align } from './utils/Align';
+import TestGameScene from './scenes/TestGameScene';
 
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
     width: window.innerWidth,
     height: window.innerHeight,
     parent: 'game',
-    scene: [TitleScene, GameScene, InterviewScene, MoralChoiceScene, EndScene]
+    scene: [TitleScene, TestGameScene, InterviewScene, MoralChoiceScene, EndScene]
 };
 
 export class Game extends Phaser.Game {

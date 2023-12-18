@@ -1,41 +1,82 @@
 import 'phaser';
 import { BaseScene } from './BaseScene';
+import Dialogue from '~/utils/dialogue/Dialogue';
 
-export class GameScene extends BaseScene {
+interface GameSceneOptions extends Phaser.Types.Scenes.SettingsConfig {
+    dialogue: Dialogue;
+}
+
+class GameScene extends BaseScene {
+
+    public dialogue: Dialogue | null = null;
+    protected oldIndex = 0;
+
+    // Variables for showing current dialogue
+    protected speechText: Phaser.GameObjects.Text | null = null;
+    protected speakerImage: Phaser.GameObjects.Image | null = null;
+    protected speakerName: Phaser.GameObjects.Text | null = null;
+    protected choices: Phaser.GameObjects.Text[] = [];
+    protected nextText: Phaser.GameObjects.Text | null = null;
     
-    constructor() {
-        super({ key: 'GameScene' });
+    constructor(options?: string | GameSceneOptions | undefined) {
+        super(options);
+        
+        if (options !== undefined && typeof options !== 'string' && 'dialogue' in options) {
+            this.dialogue = options.dialogue;
+            this.dialogue.setGameScene(this);
+        }
     }
 
     create() {
-        // ... Code existant pour afficher les textes des CV
-        let cvSprite1 = this.add.sprite(100, 200, 'cv1').setInteractive();
-        cvSprite1.on('pointerdown', () => {
-            // Afficher les détails du CV 1
-        });
-
-        let cvSprite2 = this.add.sprite(300, 200, 'cv2').setInteractive();
-        cvSprite2.on('pointerdown', () => {
-            // Afficher les détails du CV 2
-        });
-
-        // Afficher les CV
-        this.add.text(100, 150, 'CV de Personne 1', { color: '#000', fontSize: '20px' });
-        this.add.text(100, 300, 'CV de Personne 2', { color: '#000', fontSize: '20px' });
-    
-        // Ajouter un bouton pour passer à l'entretien
-        let startButton = this.add.text(400, 500, 'Commencer l\'entretien', { color: '#0f0', fontSize: '24px' })
-            .setInteractive({ useHandCursor: true })
-            .on('pointerdown', () => this.startInterview());
+        if (this.dialogue !== null) {
+            this.dialogue.currentIndex = 0;
+            this.showCurrentDialogue();
+        }
     }
     
-    startInterview() {
-        // Passer des données aux scènes suivantes, comme les CVs ou les réponses sélectionnées
-        const interviewData = {
-            cv1: 'Informations CV 1',
-            cv2: 'Informations CV 2'
-        };
-        this.scene.start('InterviewScene', interviewData);
+    removeOldObjects() {
+        this.speechText?.destroy();
+        this.speakerImage?.destroy();
+        this.speakerName?.destroy();
+        this.choices?.forEach((choice) => choice.destroy());
+        this.nextText?.destroy();
+    }
+
+    update() {
+        if (this.dialogue !== null && this.oldIndex !== this.dialogue.currentIndex) {
+            this.removeOldObjects();
+            this.oldIndex = this.dialogue.currentIndex;
+            this.showCurrentDialogue();
+        }
+    }
+
+    showCurrentDialogue() {
+        if (this.dialogue === null) return;
+
+        const currentElement = this.dialogue.getCurrentElement();
+        if (currentElement === undefined) return;
+
+        this.speechText = this.add.text(10, 40, currentElement.speech?.text ?? "");
+        this.speakerName = this.add.text(10, 10, currentElement.speaker?.name ?? "");
+        this.choices = currentElement.choices?.map((choice, i) => {
+            const choiceText = this.add.text(10 + 50 * i, 70, choice.answer ?? "").setInteractive();
+            choiceText.on('pointerdown', () => {
+                if (this.dialogue === null) return;
+                choice.action?.(this.dialogue);
+                if (choice.incrementAfterAction) this.dialogue.incrementIndex();
+            });
+            return choiceText;
+        }) ?? [];
+
+        this.nextText = this.add.text(10, 100, "NEXT").setInteractive();
+        this.nextText.on('pointerdown', () => {
+            this.dialogue?.incrementIndex();
+            console.log("Incremented dialogue index");
+        });
+
+        console.log("Showing element number " + this.dialogue?.currentIndex);
     }
     
 }
+
+export { GameScene };

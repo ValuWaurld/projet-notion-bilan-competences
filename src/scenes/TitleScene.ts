@@ -43,7 +43,7 @@ export class TitleScene extends BaseScene {
             .setOrigin(0.5, 0.5);
 
         playButton.on('pointerdown', () => {
-            this.scene.start('GameScene');
+            this.scene.start('TestGameScene');
         });
 
         // Bouton 'Credits'
