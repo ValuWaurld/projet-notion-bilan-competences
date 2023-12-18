@@ -1,8 +1,7 @@
 import 'phaser';
 
 // Import scenes
-import { BootScene } from './scenes/BootScene';
-import { PreloadScene } from './scenes/PreloadScene';
+import { BaseScene } from './scenes/BaseScene';
 import { TitleScene } from './scenes/TitleScene';
 
 // Import other classes
@@ -13,7 +12,7 @@ const config: Phaser.Types.Core.GameConfig = {
     width: window.innerWidth,
     height: window.innerHeight,
     parent: 'game',
-    scene: [BootScene, PreloadScene, TitleScene]
+    scene: [TitleScene]
 };
 
 export class Game extends Phaser.Game {

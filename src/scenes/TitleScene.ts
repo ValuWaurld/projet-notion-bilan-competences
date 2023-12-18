@@ -1,28 +1,56 @@
-import 'phaser';
+import "phaser";
+import { BaseScene } from "./BaseScene";
 
-export class TitleScene extends Phaser.Scene {
+export class TitleScene extends BaseScene {
+
     constructor() {
-        super({ key: 'TitleScene' });
+        super({ key: "TitleScene" });
     }
 
     preload() {
-        // Assurez-vous que l'image 'forest' est chargée ici si ce n'est pas déjà fait
+        this.load.image("OfficeBackground", require("../assets/OfficeBackground.png"));
     }
 
     create() {
-        const forest = this.add.image(0, 0, 'forest').setOrigin(0, 0);
+        const backgroundImage = this.add.image(0, 0, "OfficeBackground").setOrigin(0, 0);
+        const scaleY = this.cameras.main.height / backgroundImage.height;
 
-        const scaleX = this.cameras.main.width / forest.width;
-        const scaleY = this.cameras.main.height / forest.height;
-        const scale = Math.max(scaleX, scaleY);
-
-        forest.setScale(scale);
-
-        // Centrer l'image si nécessaire
-        if (scale === scaleX) {
-            forest.y = (this.cameras.main.height - forest.height * scale) / 2;
-        } else {
-            forest.x = (this.cameras.main.width - forest.width * scale) / 2;
+        backgroundImage.setScale(1, scaleY);
+        backgroundImage.preFX?.addBlur(0);
+        backgroundImage.postFX?.addBlur(0);
+        
+        // Center background if needed
+        if (backgroundImage.width < this.cameras.main.width) {
+            backgroundImage.setX((this.cameras.main.width - backgroundImage.width) / 2);
         }
+
+        // Add title text
+        const titleText = this.add.text(this.cameras.main.centerX, 100, "MY GAME", {
+            fontSize: "64px",
+            color: "#000000",
+            backgroundColor: "#ffffff",
+            padding: {
+                left: 20,
+                right: 20,
+                top: 10,
+                bottom: 10
+            }
+        });
+        titleText.setOrigin(0.5, 0.5);
+
+        const playButton = this.add.sprite(this.cameras.main.centerX, 300, "playButton").setInteractive();
+        playButton.setOrigin(0.5, 0.5);
+        playButton.on("pointerdown", () => {
+            console.log("Play button clicked");
+        });
+
+        const creditsButton = this.add.sprite(this.cameras.main.centerX, 500, "creditsButton").setInteractive();
+        creditsButton.setOrigin(0.5, 0.5);
+        creditsButton.on("pointerdown", () => {
+            console.log("Credits button clicked");
+        });
+
+        console.log("Title screen added");
     }
+
 }
