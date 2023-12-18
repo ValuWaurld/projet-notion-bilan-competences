@@ -1,27 +1,25 @@
 import 'phaser';
 
 export class MoralChoiceScene extends Phaser.Scene {
+    moralChoices: string[];
+
     constructor() {
         super({ key: 'MoralChoiceScene' });
+        this.moralChoices = [];
     }
-
+    
     create() {
-        this.add.text(100, 50, 'Scénario moral: Si vous voyez un collègue commettre une petite erreur sans conséquence, que faites-vous?', { color: '#000', fontSize: '20px' });
-
-        // Ajouter des choix
-        this.add.text(100, 100, 'Choix A: L\'ignorer', { color: '#0f0', fontSize: '18px' })
-            .setInteractive()
-            .on('pointerdown', () => this.handleChoice('A'));
-
-        this.add.text(100, 150, 'Choix B: Le signaler au supérieur', { color: '#0f0', fontSize: '18px' })
-            .setInteractive()
-            .on('pointerdown', () => this.handleChoice('B'));
+        // Ajouter des scénarios moraux ici
+        // Par exemple, un scénario différent peut être choisi aléatoirement ou basé sur les réponses précédentes
+        this.add.text(100, 50, 'Scénario moral: [Insérez un scénario ici]', { color: '#000', fontSize: '20px' });
+    
+        // Ajouter des choix pour le scénario
+        // ...
     }
-
+    
     handleChoice(choice: string) {
-        // Traiter le choix ici
+        this.moralChoices.push(choice);
         console.log(`Choix effectué: ${choice}`);
-        // Passer à la scène suivante
-        this.scene.start('EndScene');
+        // Gérer le passage à la scène suivante ou à un autre scénario moral
     }
 }

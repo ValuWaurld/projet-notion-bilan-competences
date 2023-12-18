@@ -7,6 +7,7 @@ export class InterviewScene extends Phaser.Scene {
     interviewResponses: any;
     constructor() {
         super({ key: 'InterviewScene' });
+        this.interviewResponses = [];
         this.currentQuestionIndex = 0;
         this.questions = [
             { text: "Pourquoi voulez-vous ce travail?", responses: ["Réponse A", "Réponse B"] },
@@ -32,12 +33,18 @@ export class InterviewScene extends Phaser.Scene {
     }
     
     handleResponse(response: string) {
+        this.interviewResponses.push(response);
         console.log(`Réponse choisie: ${response}`);
         this.currentQuestionIndex++;
         if (this.currentQuestionIndex < this.questions.length) {
+            this.clearQuestion();
             this.showQuestion(); // Afficher la prochaine question
         } else {
             this.scene.start('MoralChoiceScene', { cvData: this.cvData, interviewResponses: this.interviewResponses });
         }
+    }
+    
+    clearQuestion() {
+        this.children.removeAll(); // Effacer la question et les réponses actuelles
     }
 }
