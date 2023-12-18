@@ -1,9 +1,9 @@
-import Dialogue from "../utils/dialogue/Dialogue";
+import Dialogue from "../utils/dialogues/Dialogue";
 import { GameScene } from "./GameScene";
-import DialogueElement from "../utils/dialogue/DialogueElement";
-import DialogueSpeaker from "../utils/dialogue/DialogueSpeaker";
-import DialogueSpeech from "../utils/dialogue/DialogueSpeech";
-import DialogueChoice from "../utils/dialogue/DialogueChoice";
+import DialogueElement from "../utils/dialogues/DialogueElement";
+import DialogueSpeaker from "../utils/dialogues/DialogueSpeaker";
+import DialogueSpeech from "../utils/dialogues/DialogueSpeech";
+import DialogueChoice from "../utils/dialogues/DialogueChoice";
 
 const valentinSpeaker = new DialogueSpeaker()
     .setName("Valentin")

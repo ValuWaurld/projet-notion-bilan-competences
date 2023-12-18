@@ -1,6 +1,6 @@
 import 'phaser';
 import { BaseScene } from './BaseScene';
-import Dialogue from '~/utils/dialogue/Dialogue';
+import Dialogue from '~/utils/dialogues/Dialogue';
 
 interface GameSceneOptions extends Phaser.Types.Scenes.SettingsConfig {
     dialogue: Dialogue;
