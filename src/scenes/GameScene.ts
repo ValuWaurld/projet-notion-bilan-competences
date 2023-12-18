@@ -6,6 +6,17 @@ export class GameScene extends Phaser.Scene {
     }
 
     create() {
+        // ... Code existant pour afficher les textes des CV
+        let cvSprite1 = this.add.sprite(100, 200, 'cv1').setInteractive();
+        cvSprite1.on('pointerdown', () => {
+            // Afficher les détails du CV 1
+        });
+
+        let cvSprite2 = this.add.sprite(300, 200, 'cv2').setInteractive();
+        cvSprite2.on('pointerdown', () => {
+            // Afficher les détails du CV 2
+        });
+
         // Afficher les CV
         this.add.text(100, 150, 'CV de Personne 1', { color: '#000', fontSize: '20px' });
         this.add.text(100, 300, 'CV de Personne 2', { color: '#000', fontSize: '20px' });

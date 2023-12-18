@@ -16,6 +16,10 @@ export class InterviewScene extends Phaser.Scene {
     }
     
     create(data: any) {
+        // Ajouter des avatars pour les personnes interrogées
+        let avatar1 = this.add.sprite(100, 100, 'avatar1');
+        let avatar2 = this.add.sprite(300, 100, 'avatar2');
+        this.showQuestion();
         this.cvData = data;
         this.showQuestion();
     }
