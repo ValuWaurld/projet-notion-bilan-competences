@@ -34,11 +34,26 @@ export class TitleScene extends BaseScene {
                 top: 10,
                 bottom: 10
             }
-        });
-        titleText.setOrigin(0.5, 0.5);
+        }).setOrigin(0.5, 0.5);
+
+        // Style pour les boutons
+        const buttonStyle = {
+            font: '32px Arial',
+            color: '#fff',
+            backgroundColor: '#0051a5',
+            padding: {
+                left: 20,
+                right: 20,
+                top: 10,
+                bottom: 10
+            },
+            borderRadius: 15,
+            fixedWidth: 200,
+            align: 'center'
+        };
 
         // Bouton 'Play'
-        const playButton = this.add.text(this.cameras.main.centerX, 300, 'Play', { font: '32px Arial', color: '#000000' }) // Couleur modifiée en noir
+        const playButton = this.add.text(this.cameras.main.centerX, 300, 'Play', buttonStyle)
             .setInteractive()
             .setOrigin(0.5, 0.5);
 
@@ -47,13 +62,14 @@ export class TitleScene extends BaseScene {
         });
 
         // Bouton 'Credits'
-        const creditsButton = this.add.text(this.cameras.main.centerX, 400, 'Credits', { font: '32px Arial', color: '#000000' }) // Couleur modifiée en noir
+        const creditsButton = this.add.text(this.cameras.main.centerX, 400, 'Credits', buttonStyle)
             .setInteractive()
             .setOrigin(0.5, 0.5);
 
         creditsButton.on('pointerdown', () => {
             console.log("Credits button clicked");
         });
+
 
         console.log("Title screen added");
     }
