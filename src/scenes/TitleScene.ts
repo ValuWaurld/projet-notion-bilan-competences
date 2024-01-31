@@ -19,14 +19,13 @@ export class TitleScene extends BaseScene {
                 this.load.image(`${avatarName}_${avatarEmotion}`, require(`../assets/avatars/${avatarName}_${avatarEmotion}.png`));
             }
         }
-        this.load.image("Khaled_smiling", require("../assets/avatars/Khaled_smiling.png"));
-        this.load.image("Khaled_happy", require("../assets/avatars/Khaled_happy.png"));
     }
 
     create() {
         const backgroundImage = this.add.image(0, 0, "OfficeBackground").setOrigin(0, 0);
         const scaleY = this.cameras.main.height / backgroundImage.height;
         const scaleX = this.cameras.main.width / backgroundImage.width;
+        console.log("Dimensions", this.cameras.main.width, this.cameras.main.height, backgroundImage.width, backgroundImage.height);
 
         backgroundImage.setScale(scaleX, scaleY);
         backgroundImage.preFX?.addBlur(0);
