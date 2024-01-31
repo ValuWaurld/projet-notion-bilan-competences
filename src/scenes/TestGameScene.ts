@@ -6,20 +6,19 @@ import DialogueSpeech from "../utils/dialogues/DialogueSpeech";
 import DialogueChoice from "../utils/dialogues/DialogueChoice";
 
 const valentinSpeaker = new DialogueSpeaker()
-    .setName("Valentin")
-    .setEmotion("Happy");
+    .setName("Valentin");
 
 const dialogue = new Dialogue()
     .addElements(
         new DialogueElement()
             .setSpeaker(valentinSpeaker)
-            .setSpeech(new DialogueSpeech().setText("Hello!")),
+            .setSpeech(new DialogueSpeech().setText("Hello!").setEmotion("happy")),
         new DialogueElement()
             .setSpeaker(valentinSpeaker)
-            .setSpeech(new DialogueSpeech().setText("How are you?")),
+            .setSpeech(new DialogueSpeech().setText("How are you?").setEmotion("smiling")),
         new DialogueElement()
             .setSpeaker(valentinSpeaker)
-            .setSpeech(new DialogueSpeech().setText("Do you want to play a game?"))
+            .setSpeech(new DialogueSpeech().setText("Do you want to play a game?").setEmotion("thinking"))
             .setChoices(
                 new DialogueChoice()
                     .setAnswer("Yes")
@@ -28,11 +27,11 @@ const dialogue = new Dialogue()
                 new DialogueChoice()
                     .setAnswer("No")
                     .setIncrementAfterAction(true)
-                    .setAction((_) => console.log("Clicked 'No'")),  
+                    .setAction((_) => console.log("Clicked 'No'")),
             ),
         new DialogueElement()
             .setSpeaker(valentinSpeaker)
-            .setSpeech(new DialogueSpeech().setText("Cool. See you later!")),
+            .setSpeech(new DialogueSpeech().setText("Cool. See you later!").setEmotion("smiling")),
     );
 
 export default class TestGameScene extends GameScene {
