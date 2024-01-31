@@ -50,7 +50,7 @@ class GameScene extends BaseScene {
         }
     }
 
-    showCurrentDialogue() {
+    async showCurrentDialogue() {
         if (this.dialogue === null) return;
 
         const currentElement = this.dialogue.getCurrentElement();
@@ -58,6 +58,10 @@ class GameScene extends BaseScene {
 
         this.speechText = this.add.text(10, 40, currentElement.speech?.text ?? "");
         this.speakerName = this.add.text(10, 10, currentElement.speaker?.name ?? "");
+        const emotion = currentElement.speech?.emotion;
+        if (!emotion) throw new Error("No emotion found");
+        const imageName = currentElement.speaker?.name + "_" + emotion;
+        this.speakerImage = this.add.image(300, 300, imageName);
         this.choices = currentElement.choices?.map((choice, i) => {
             const choiceText = this.add.text(10 + 50 * i, 70, choice.answer ?? "").setInteractive();
             choiceText.on('pointerdown', () => {

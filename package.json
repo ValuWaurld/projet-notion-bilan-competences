@@ -13,6 +13,7 @@
   "author": "Phaser Editor 2D <developers@phasereditor2d.com> (https://phasereditor2d.com/)",
   "license": "MIT",
   "dependencies": {
+    "fs": "^0.0.1-security",
     "phaser": "^3.60.0"
   },
   "devDependencies": {

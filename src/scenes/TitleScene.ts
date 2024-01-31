@@ -1,6 +1,11 @@
 import "phaser";
 import { BaseScene } from "./BaseScene";
 
+const avatars: { [key: string]: string[] } = {
+    "Khaled": ["angry", "crying", "facepalm", "happy", "sad", "sighing", "smiling", "stressed", "winking"],
+    "Valentin": []
+}
+
 export class TitleScene extends BaseScene {
 
     constructor() {
@@ -9,6 +14,13 @@ export class TitleScene extends BaseScene {
 
     preload() {
         this.load.image("OfficeBackground", require("../assets/OfficeBackground.png"));
+        for (const avatarName in avatars) {
+            for (const avatarEmotion of avatars[avatarName]) {
+                this.load.image(`${avatarName}_${avatarEmotion}`, require(`../assets/avatars/${avatarName}_${avatarEmotion}.png`));
+            }
+        }
+        this.load.image("Khaled_smiling", require("../assets/avatars/Khaled_smiling.png"));
+        this.load.image("Khaled_happy", require("../assets/avatars/Khaled_happy.png"));
     }
 
     create() {

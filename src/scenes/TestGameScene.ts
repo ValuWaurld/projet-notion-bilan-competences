@@ -5,20 +5,20 @@ import DialogueSpeaker from "../utils/dialogues/DialogueSpeaker";
 import DialogueSpeech from "../utils/dialogues/DialogueSpeech";
 import DialogueChoice from "../utils/dialogues/DialogueChoice";
 
-const valentinSpeaker = new DialogueSpeaker()
-    .setName("Valentin");
+const khaledSpeaker = new DialogueSpeaker()
+    .setName("Khaled");
 
 const dialogue = new Dialogue()
     .addElements(
         new DialogueElement()
-            .setSpeaker(valentinSpeaker)
+            .setSpeaker(khaledSpeaker)
             .setSpeech(new DialogueSpeech().setText("Hello!").setEmotion("happy")),
         new DialogueElement()
-            .setSpeaker(valentinSpeaker)
+            .setSpeaker(khaledSpeaker)
             .setSpeech(new DialogueSpeech().setText("How are you?").setEmotion("smiling")),
         new DialogueElement()
-            .setSpeaker(valentinSpeaker)
-            .setSpeech(new DialogueSpeech().setText("Do you want to play a game?").setEmotion("thinking"))
+            .setSpeaker(khaledSpeaker)
+            .setSpeech(new DialogueSpeech().setText("Do you want to play a game?").setEmotion("winking"))
             .setChoices(
                 new DialogueChoice()
                     .setAnswer("Yes")
@@ -30,7 +30,7 @@ const dialogue = new Dialogue()
                     .setAction((_) => console.log("Clicked 'No'")),
             ),
         new DialogueElement()
-            .setSpeaker(valentinSpeaker)
+            .setSpeaker(khaledSpeaker)
             .setSpeech(new DialogueSpeech().setText("Cool. See you later!").setEmotion("smiling")),
     );
 
