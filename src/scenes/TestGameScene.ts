@@ -61,9 +61,6 @@ export default class TestGameScene extends GameScene {
         const scaleY = this.cameras.main.height / backgroundImage.height;
         const scaleX = this.cameras.main.width / backgroundImage.width;
         backgroundImage.setScale(scaleX, scaleY);
-        if (backgroundImage.width < this.cameras.main.width) {
-            backgroundImage.setX((this.cameras.main.width - backgroundImage.width) / 2);
-        }
         super.create();
     }
 
