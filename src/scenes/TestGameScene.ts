@@ -57,6 +57,14 @@ export default class TestGameScene extends GameScene {
     }
 
     create() {
+        // Ajouter l'image de fond
+        const backgroundImage = this.add.image(0, 0, "OfficeBackground").setOrigin(0, 0);
+        const scaleY = this.cameras.main.height / backgroundImage.height;
+        const scaleX = this.cameras.main.width / backgroundImage.width;
+        backgroundImage.setScale(scaleX, scaleY);
+        if (backgroundImage.width < this.cameras.main.width) {
+            backgroundImage.setX((this.cameras.main.width - backgroundImage.width) / 2);
+        }
         super.create();
     }
 
