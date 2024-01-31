@@ -25,15 +25,10 @@ export class TitleScene extends BaseScene {
         const backgroundImage = this.add.image(0, 0, "OfficeBackground").setOrigin(0, 0);
         const scaleY = this.cameras.main.height / backgroundImage.height;
         const scaleX = this.cameras.main.width / backgroundImage.width;
-        console.log("Dimensions", this.cameras.main.width, this.cameras.main.height, backgroundImage.width, backgroundImage.height);
 
         backgroundImage.setScale(scaleX, scaleY);
         backgroundImage.preFX?.addBlur(0);
         backgroundImage.postFX?.addBlur(0);
-        
-        if (backgroundImage.width < this.cameras.main.width) {
-            backgroundImage.setX((this.cameras.main.width - backgroundImage.width) / 2);
-        }
 
         const titleText = this.add.text(this.cameras.main.centerX, 100, "MY GAME", {
             fontSize: "64px",
