@@ -87,7 +87,7 @@ class GameScene extends BaseScene {
             const emotion = person.speech?.emotion;
             if (!emotion) throw new Error("No emotion found");
             const imageName = person.speaker?.name + "_" + emotion;
-            personObject.speakerImage = this.add.image(xPosition + personWidth / 2, this.cameras.main.height * 53.5 / 100, imageName);
+            personObject.speakerImage = this.add.image(xPosition + personWidth / 2, this.cameras.main.height * 50 / 100, imageName);
             personObject.speakerImage.setState
     
             personObject.choices = person.choices?.map((choice, i) => {
