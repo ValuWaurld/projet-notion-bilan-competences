@@ -23,6 +23,7 @@ class GameScene extends BaseScene {
 
     // Variables for showing current dialogue
     protected peopleObjects: GameSceneObjects[] = [];
+    protected backgroundFrontImage: Phaser.GameObjects.Image | null = null;
     
     constructor(options?: string | GameSceneOptions | undefined) {
         super(options);
@@ -49,6 +50,7 @@ class GameScene extends BaseScene {
             personObjects.nextText?.destroy();
         }
         this.peopleObjects = [];
+        this.backgroundFrontImage?.destroy();
     }
 
     update() {
@@ -98,6 +100,11 @@ class GameScene extends BaseScene {
 
             this.peopleObjects.push(personObject);
         }
+
+        this.backgroundFrontImage = this.add.image(0, 0, "OfficeBackgroundFront").setOrigin(0, 0);
+        const scaleY = this.cameras.main.height / this.backgroundFrontImage.height;
+        const scaleX = this.cameras.main.width / this.backgroundFrontImage.width;
+        this.backgroundFrontImage.setScale(scaleX, scaleY);
 
         console.log("Showing element number " + this.dialogue?.currentIndex);
     }
