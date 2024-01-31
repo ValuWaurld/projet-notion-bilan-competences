@@ -57,10 +57,19 @@ export default class TestGameScene extends GameScene {
     }
 
     create() {
-        const backgroundImage = this.add.image(0, 0, "OfficeBackground").setOrigin(0, 0);
-        const scaleY = this.cameras.main.height / backgroundImage.height;
-        const scaleX = this.cameras.main.width / backgroundImage.width;
-        backgroundImage.setScale(scaleX, scaleY);
+        const backgrounds: { [key: string]: number } = { "OfficeBackgroundFront": 0, "OfficeBackgroundBack": 1 };
+        for (const backgroundName in backgrounds) {
+            const backgroundImage = this.add.image(0, 0, backgroundName).setOrigin(0, 0);
+            const scaleY = this.cameras.main.height / backgroundImage.height;
+            const scaleX = this.cameras.main.width / backgroundImage.width;
+            backgroundImage.setScale(scaleX, scaleY);
+
+            const blurLevel = backgrounds[backgroundName];
+            if (blurLevel > 0) {
+                backgroundImage.preFX?.addBlur(blurLevel);
+                backgroundImage.postFX?.addBlur(blurLevel);
+            }
+        }
         super.create();
     }
 

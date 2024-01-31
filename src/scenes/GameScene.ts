@@ -79,7 +79,7 @@ class GameScene extends BaseScene {
             const emotion = person.speech?.emotion;
             if (!emotion) throw new Error("No emotion found");
             const imageName = person.speaker?.name + "_" + emotion;
-            personObject.speakerImage = this.add.image(300 + PEOPLE_SEPARATOR_PIXELS * personIndex, 300, imageName);
+            personObject.speakerImage = this.add.image(300 + PEOPLE_SEPARATOR_PIXELS * personIndex, 490, imageName);
             personObject.choices = person.choices?.map((choice, i) => {
                 const choiceText = this.add.text(10 + 50 * i + PEOPLE_SEPARATOR_PIXELS * personIndex, 70, choice.answer ?? "").setInteractive();
                 choiceText.on('pointerdown', () => {

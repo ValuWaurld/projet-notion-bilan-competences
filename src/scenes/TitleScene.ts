@@ -13,7 +13,8 @@ export class TitleScene extends BaseScene {
     }
 
     preload() {
-        this.load.image("OfficeBackground", require("../assets/OfficeBackground.png"));
+        this.load.image("OfficeBackgroundFront", require("../assets/OfficeBackgroundFront.png"));
+        this.load.image("OfficeBackgroundBack", require("../assets/OfficeBackgroundBack.png"));
         for (const avatarName in avatars) {
             for (const avatarEmotion of avatars[avatarName]) {
                 this.load.image(`${avatarName}_${avatarEmotion}`, require(`../assets/avatars/${avatarName}_${avatarEmotion}.png`));
@@ -22,13 +23,15 @@ export class TitleScene extends BaseScene {
     }
 
     create() {
-        const backgroundImage = this.add.image(0, 0, "OfficeBackground").setOrigin(0, 0);
-        const scaleY = this.cameras.main.height / backgroundImage.height;
-        const scaleX = this.cameras.main.width / backgroundImage.width;
+        for (const backgroundName of ["OfficeBackgroundFront", "OfficeBackgroundBack"]) {
+            const backgroundImage = this.add.image(0, 0, backgroundName).setOrigin(0, 0);
+            const scaleY = this.cameras.main.height / backgroundImage.height;
+            const scaleX = this.cameras.main.width / backgroundImage.width;
 
-        backgroundImage.setScale(scaleX, scaleY);
-        backgroundImage.preFX?.addBlur(0);
-        backgroundImage.postFX?.addBlur(0);
+            backgroundImage.setScale(scaleX, scaleY);
+            backgroundImage.preFX?.addBlur(0);
+            backgroundImage.postFX?.addBlur(0);
+        }
 
         const titleText = this.add.text(this.cameras.main.centerX, 100, "MY GAME", {
             fontSize: "64px",
