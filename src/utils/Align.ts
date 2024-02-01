@@ -15,17 +15,23 @@ export class Align {
         return Align.__game;
     }
 
-    public static scaleToGameW(img: Phaser.GameObjects.Image, per: number) { 
-        img.displayWidth = Number(Align.game.config.width) * per;
-        img.scaleY = img.scaleX;
-    }
-
     public static centerH(img: Phaser.GameObjects.Image) {
         img.x = Number(Align.game.config.width) / 2;
     }
 
     public static centerV(img: Phaser.GameObjects.Image) {
         img.y = Number(Align.game.config.height) / 2;
+    }
+
+    public static scaleToGame(img: Phaser.GameObjects.Image, percentage: number = 1, keepAspectRatio: boolean = true) {
+        const scaleX = Number(Align.game.config.width) * percentage / img.width;
+        const scaleY = Number(Align.game.config.height) * percentage / img.height;
+        const scale = Math.min(scaleX, scaleY);
+        if (keepAspectRatio) {
+            img.setScale(scale);
+        } else {
+            img.setScale(scaleX, scaleY);
+        }
     }
 
 }

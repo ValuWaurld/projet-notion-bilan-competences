@@ -1,6 +1,7 @@
 import 'phaser';
 import { BaseScene } from './BaseScene';
-import Dialogue from '~/utils/dialogues/Dialogue';
+import Dialogue from '../utils/dialogues/Dialogue';
+import { Align } from '../utils/Align';
 
 interface GameSceneOptions extends Phaser.Types.Scenes.SettingsConfig {
     dialogue: Dialogue;
@@ -88,7 +89,7 @@ class GameScene extends BaseScene {
             if (!emotion) throw new Error("No emotion found");
             const imageName = person.speaker?.name + "_" + emotion;
             personObject.speakerImage = this.add.image(xPosition + personWidth / 2, this.cameras.main.height * 50 / 100, imageName);
-            personObject.speakerImage.setState
+            Align.scaleToGame(personObject.speakerImage, 1/2);
     
             personObject.choices = person.choices?.map((choice, i) => {
                 const choiceText = this.add.text(xPosition + 50 * i, 70, choice.answer ?? "").setInteractive();
@@ -110,9 +111,7 @@ class GameScene extends BaseScene {
         }
 
         this.backgroundFrontImage = this.add.image(0, 0, "OfficeBackgroundFront").setOrigin(0, 0);
-        const scaleY = this.cameras.main.height / this.backgroundFrontImage.height;
-        const scaleX = this.cameras.main.width / this.backgroundFrontImage.width;
-        this.backgroundFrontImage.setScale(scaleX, scaleY);
+        Align.scaleToGame(this.backgroundFrontImage, 1, false);
 
         console.log("Showing element number " + this.dialogue?.currentIndex);
     }
