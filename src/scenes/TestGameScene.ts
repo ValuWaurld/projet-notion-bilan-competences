@@ -15,7 +15,7 @@ const dialogue = new Dialogue()
             .setPeople(
                 new DialoguePerson()
                     .setSpeaker(khaledSpeaker)
-                    .setSpeech(new DialogueSpeech().setText("Hello!").setEmotion("happy")),
+                    .setSpeech(new DialogueSpeech().setText("Hello!").setEmotion("stressed")),
                 new DialoguePerson()
                     .setSpeaker(khaledSpeaker)
                     .setSpeech(new DialogueSpeech().setText("Oh no, not him...").setEmotion("sighing"))
