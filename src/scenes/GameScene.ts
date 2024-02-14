@@ -103,9 +103,7 @@ class GameScene extends BaseScene {
 
         const xPosition = personIndex * personWidth;
 
-        // Dessiner un fond derrière le texte
         let background = this.add.graphics({ fillStyle: { color: 0x000000, alpha: 0.5 } });
-        // Ajustez les dimensions et la position du rectangle selon vos besoins
         personObject.speechBackground = background.fillRect(xPosition + personWidth * 0.05, 30, personWidth*0.9, 100);
 
         personObject.speechText = this.add.text(xPosition + personWidth / 2, 75, person.speech?.text ?? "", generateSpeechStyleOptions(personWidth));
