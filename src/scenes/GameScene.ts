@@ -96,29 +96,31 @@ class GameScene extends BaseScene {
         const xPosition = personIndex * personWidth;
 
         personObject.speechText = this.add.text(xPosition, 40, person.speech?.text ?? "");
-        personObject.speakerName = this.add.text(xPosition, 10, person.speaker?.name ?? "");
-        const emotion = person.speech?.emotion;
-        if (!emotion) throw new Error("No emotion found");
-        const imageName = person.speaker?.name + "_" + emotion;
-        personObject.speakerImage = this.add.image(xPosition + personWidth / 2, this.cameras.main.height * 50 / 100, imageName);
-        Align.scaleToGame(personObject.speakerImage, 1/2);
+        if (person.speaker?.name !== "Narrator") {
+            personObject.speakerName = this.add.text(xPosition, 10, person.speaker?.name ?? "");
+            const emotion = person.speech?.emotion;
+            if (!emotion) throw new Error("No emotion found");
+            const imageName = person.speaker?.name + "_" + emotion;
+            personObject.speakerImage = this.add.image(xPosition + personWidth / 2, this.cameras.main.height * 50 / 100, imageName);
+            Align.scaleToGame(personObject.speakerImage, 1/2);            
+        }
 
-        personObject.choices = person.choices?.map((choice, i) => {
-            const choiceText = this.add.text(xPosition + 50 * i, 70, choice.answer ?? "").setInteractive();
-            choiceText.on('pointerdown', () => {
-                if (this.dialogue === null) return;
-                choice.action?.(this.dialogue);
-                if (choice.incrementAfterAction) this.dialogue.incrementIndex();
-            });
-            return choiceText;
-        }) ?? [];
-
-        if (person.choices?.length === 0) {
+        if (!person.choices || person.choices.length === 0) {
             personObject.nextText = this.add.text(xPosition, 100, "NEXT").setInteractive();
             personObject.nextText.on('pointerdown', () => {
                 this.dialogue?.incrementIndex();
                 console.log("Incremented dialogue index");
             });
+        } else {
+            personObject.choices = person.choices?.map((choice, i) => {
+                const choiceText = this.add.text(xPosition + 50 * i, 70, choice.answer ?? "").setInteractive();
+                choiceText.on('pointerdown', () => {
+                    if (this.dialogue === null) return;
+                    choice.action?.(this.dialogue);
+                    if (choice.incrementAfterAction) this.dialogue.incrementIndex();
+                });
+                return choiceText;
+            }) ?? [];
         }
 
         this.peopleObjects.push(personObject);
