@@ -6,6 +6,8 @@ const avatars: { [key: string]: string[] } = {
     "Valentin": []
 }
 
+import TestGameScene from "./TestGameScene";
+
 export class TitleScene extends BaseScene {
 
     constructor() {
@@ -45,7 +47,6 @@ export class TitleScene extends BaseScene {
             }
         }).setOrigin(0.5, 0.5);
 
-        // Style pour les boutons
         const buttonStyle = {
             font: '32px Arial',
             color: '#fff',
@@ -61,25 +62,18 @@ export class TitleScene extends BaseScene {
             align: 'center'
         };
 
-        // Bouton 'Play'
         const playButton = this.add.text(this.cameras.main.centerX, 300, 'Play', buttonStyle)
             .setInteractive()
             .setOrigin(0.5, 0.5);
-
         playButton.on('pointerdown', () => {
-            this.scene.start('TestGameScene');
+            this.scene.start("WelcomeGameScene");
         });
 
-        // Bouton 'Credits'
         const creditsButton = this.add.text(this.cameras.main.centerX, 400, 'Credits', buttonStyle)
             .setInteractive()
             .setOrigin(0.5, 0.5);
-
         creditsButton.on('pointerdown', () => {
             console.log("Credits button clicked");
         });
-
-
-        console.log("Title screen added");
     }
 }

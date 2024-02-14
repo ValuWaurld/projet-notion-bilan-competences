@@ -1,6 +1,6 @@
 import "phaser";
 import DialogueElement from "./DialogueElement";
-import { GameScene } from "~/scenes/GameScene";
+import { GameScene } from "../../scenes/GameScene";
 
 export default class Dialogue {
 
