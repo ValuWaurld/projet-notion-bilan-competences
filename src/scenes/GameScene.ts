@@ -2,6 +2,7 @@ import 'phaser';
 import { BaseScene } from './BaseScene';
 import Dialogue from '../utils/dialogues/Dialogue';
 import { Align } from '../utils/Align';
+import DialogueElement from '~/utils/dialogues/DialogueElement';
 
 interface GameSceneOptions extends Phaser.Types.Scenes.SettingsConfig {
     dialogue: Dialogue;
@@ -42,14 +43,18 @@ class GameScene extends BaseScene {
     
     removeOldObjects() {
         for (const personObjects of this.peopleObjects) {
-            personObjects.speechText?.destroy();
-            personObjects.speakerImage?.destroy();
-            personObjects.speakerName?.destroy();
-            personObjects.choices?.forEach((choice) => choice.destroy());
-            personObjects.nextText?.destroy();
+            this.removePersonObjects(personObjects);
         }
         this.peopleObjects = [];
         this.backgroundFrontImage?.destroy();
+    }
+
+    removePersonObjects(personObjects: GameSceneObjects) {
+        personObjects.speechText?.destroy();
+        personObjects.speakerImage?.destroy();
+        personObjects.speakerName?.destroy();
+        personObjects.choices?.forEach((choice) => choice.destroy());
+        personObjects.nextText?.destroy();
     }
 
     update() {
@@ -60,60 +65,63 @@ class GameScene extends BaseScene {
         }
     }
 
-    async showCurrentDialogue() {
+    showCurrentDialogue() {
         if (this.dialogue === null) return;
     
         const currentElement = this.dialogue.getCurrentElement();
         if (currentElement === undefined) return;
-    
-        const screenWidth = this.cameras.main.width;
-        const personWidth = screenWidth / currentElement.people.length;
-        const xOffset = 10; // petit décalage pour ne pas coller au bord de l'écran
-    
+        
         for (let personIndex = 0; personIndex < currentElement.people.length; personIndex += 1) {
-            const person = currentElement.people[personIndex];
-            const personObject: GameSceneObjects = {
-                speechText: null,
-                speakerImage: null,
-                speakerName: null,
-                choices: [],
-                nextText: null
-            };
-    
-            // Calculer la position X pour chaque personnage
-            const xPosition = personIndex * personWidth + xOffset;
-    
-            personObject.speechText = this.add.text(xPosition, 40, person.speech?.text ?? "");
-            personObject.speakerName = this.add.text(xPosition, 10, person.speaker?.name ?? "");
-            const emotion = person.speech?.emotion;
-            if (!emotion) throw new Error("No emotion found");
-            const imageName = person.speaker?.name + "_" + emotion;
-            personObject.speakerImage = this.add.image(xPosition + personWidth / 2, this.cameras.main.height * 50 / 100, imageName);
-            Align.scaleToGame(personObject.speakerImage, 1/2);
-    
-            personObject.choices = person.choices?.map((choice, i) => {
-                const choiceText = this.add.text(xPosition + 50 * i, 70, choice.answer ?? "").setInteractive();
-                choiceText.on('pointerdown', () => {
-                    if (this.dialogue === null) return;
-                    choice.action?.(this.dialogue);
-                    if (choice.incrementAfterAction) this.dialogue.incrementIndex();
-                });
-                return choiceText;
-            }) ?? [];
-    
-            personObject.nextText = this.add.text(xPosition, 100, "NEXT").setInteractive();
-            personObject.nextText.on('pointerdown', () => {
-                this.dialogue?.incrementIndex();
-                console.log("Incremented dialogue index");
-            });
-    
-            this.peopleObjects.push(personObject);
+            this.showPersonDialogue(currentElement, personIndex);
         }
 
         this.backgroundFrontImage = this.add.image(0, 0, "OfficeBackgroundFront").setOrigin(0, 0);
         Align.scaleToGame(this.backgroundFrontImage, 1, false);
 
         console.log("Showing element number " + this.dialogue?.currentIndex);
+    }
+
+    showPersonDialogue(currentElement:  DialogueElement, personIndex: number) {
+        const personWidth = this.cameras.main.width / currentElement.people.length;
+
+        const person = currentElement.people[personIndex];
+        const personObject: GameSceneObjects = {
+            speechText: null,
+            speakerImage: null,
+            speakerName: null,
+            choices: [],
+            nextText: null
+        };
+
+        const xPosition = personIndex * personWidth;
+
+        personObject.speechText = this.add.text(xPosition, 40, person.speech?.text ?? "");
+        personObject.speakerName = this.add.text(xPosition, 10, person.speaker?.name ?? "");
+        const emotion = person.speech?.emotion;
+        if (!emotion) throw new Error("No emotion found");
+        const imageName = person.speaker?.name + "_" + emotion;
+        personObject.speakerImage = this.add.image(xPosition + personWidth / 2, this.cameras.main.height * 50 / 100, imageName);
+        Align.scaleToGame(personObject.speakerImage, 1/2);
+
+        personObject.choices = person.choices?.map((choice, i) => {
+            const choiceText = this.add.text(xPosition + 50 * i, 70, choice.answer ?? "").setInteractive();
+            choiceText.on('pointerdown', () => {
+                if (this.dialogue === null) return;
+                choice.action?.(this.dialogue);
+                if (choice.incrementAfterAction) this.dialogue.incrementIndex();
+            });
+            return choiceText;
+        }) ?? [];
+
+        if (person.choices?.length === 0) {
+            personObject.nextText = this.add.text(xPosition, 100, "NEXT").setInteractive();
+            personObject.nextText.on('pointerdown', () => {
+                this.dialogue?.incrementIndex();
+                console.log("Incremented dialogue index");
+            });
+        }
+
+        this.peopleObjects.push(personObject);
     }
     
 }
