@@ -1,8 +1,8 @@
 import 'phaser';
 import { BaseScene } from './BaseScene';
-import Dialogue from '../utils/dialogues/Dialogue';
-import { Align } from '../utils/Align';
-import DialogueElement from '~/utils/dialogues/DialogueElement';
+import Dialogue from '../utils/structures/Dialogue';
+import { Align } from '../utils/Images';
+import DialogueElement from '~/utils/structures/DialogueElement';
 
 interface GameSceneOptions extends Phaser.Types.Scenes.SettingsConfig {
     dialogue: Dialogue;
@@ -28,9 +28,9 @@ class GameScene extends BaseScene {
     constructor(options?: string | GameSceneOptions | undefined) {
         super(options);
         
-        if (options !== undefined && typeof options !== 'string' && 'dialogue' in options) {
+        if (options !== undefined && typeof options !== 'string' && 'dialogue' in options && options.dialogue instanceof Dialogue) {
             this.dialogue = options.dialogue;
-            this.dialogue.setGameScene(this);
+            this.dialogue?.setGameScene(this);
         }
     }
 
