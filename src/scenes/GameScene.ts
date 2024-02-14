@@ -4,12 +4,19 @@ import Dialogue from '../utils/structures/Dialogue';
 import { Align } from '../utils/Images';
 import DialogueElement from '~/utils/structures/DialogueElement';
 
+const generateSpeechStyleOptions = (personWidth: number) => ({
+    color: '#FFFFFF',
+    wordWrap: { width: personWidth * 0.8, useAdvancedWrap: true },
+    align: 'center'
+})
+
 interface GameSceneOptions extends Phaser.Types.Scenes.SettingsConfig {
     dialogue: Dialogue;
 }
 
 interface GameSceneObjects {
     speechText: Phaser.GameObjects.Text | null;
+    speechBackground: Phaser.GameObjects.Graphics | null;
     speakerImage: Phaser.GameObjects.Image | null;
     speakerName: Phaser.GameObjects.Text | null;
     choices: Phaser.GameObjects.Text[];
@@ -51,6 +58,7 @@ class GameScene extends BaseScene {
 
     removePersonObjects(personObjects: GameSceneObjects) {
         personObjects.speechText?.destroy();
+        personObjects.speechBackground?.destroy();
         personObjects.speakerImage?.destroy();
         personObjects.speakerName?.destroy();
         personObjects.choices?.forEach((choice) => choice.destroy());
@@ -81,12 +89,12 @@ class GameScene extends BaseScene {
         console.log("Showing element number " + this.dialogue?.currentIndex);
     }
 
-    showPersonDialogue(currentElement:  DialogueElement, personIndex: number) {
+    showPersonDialogue(currentElement: DialogueElement, personIndex: number) {
         const personWidth = this.cameras.main.width / currentElement.people.length;
-
         const person = currentElement.people[personIndex];
         const personObject: GameSceneObjects = {
             speechText: null,
+            speechBackground: null,
             speakerImage: null,
             speakerName: null,
             choices: [],
@@ -95,25 +103,30 @@ class GameScene extends BaseScene {
 
         const xPosition = personIndex * personWidth;
 
-        personObject.speechText = this.add.text(xPosition, 40, person.speech?.text ?? "");
+        let background = this.add.graphics({ fillStyle: { color: 0x000000, alpha: 0.5 } });
+        personObject.speechBackground = background.fillRect(xPosition + personWidth * 0.05, 30, personWidth*0.9, 100);
+
+        personObject.speechText = this.add.text(xPosition + personWidth / 2, 75, person.speech?.text ?? "", generateSpeechStyleOptions(personWidth));
+        personObject.speechText.setOrigin(0.5, 0);
         if (person.speaker?.name !== "Narrator") {
-            personObject.speakerName = this.add.text(xPosition, 10, person.speaker?.name ?? "");
+            personObject.speakerName = this.add.text(xPosition + personWidth / 2, 35, person.speaker?.name ?? "", generateSpeechStyleOptions(personWidth));
+            personObject.speakerName.setOrigin(0.5, 0);
             const emotion = person.speech?.emotion;
             if (!emotion) throw new Error("No emotion found");
             const imageName = person.speaker?.name + "_" + emotion;
             personObject.speakerImage = this.add.image(xPosition + personWidth / 2, this.cameras.main.height * 50 / 100, imageName);
-            Align.scaleToGame(personObject.speakerImage, 1/2);            
+            Align.scaleToGame(personObject.speakerImage, 1/2);
         }
 
         if (!person.choices || person.choices.length === 0) {
-            personObject.nextText = this.add.text(xPosition, 100, "NEXT").setInteractive();
+            personObject.nextText = this.add.text(xPosition + 10, 70, "NEXT", { color: '#FFFFFF' }).setInteractive();
             personObject.nextText.on('pointerdown', () => {
                 this.dialogue?.incrementIndex();
                 console.log("Incremented dialogue index");
             });
         } else {
             personObject.choices = person.choices?.map((choice, i) => {
-                const choiceText = this.add.text(xPosition + 50 * i, 70, choice.answer ?? "").setInteractive();
+                const choiceText = this.add.text(xPosition + 10 + 50 * i, 90, choice.answer ?? "", { color: '#FFFFFF' }).setInteractive();
                 choiceText.on('pointerdown', () => {
                     if (this.dialogue === null) return;
                     choice.action?.(this.dialogue);
