@@ -1,6 +1,6 @@
 import Dialogue from "./Dialogue";
 
-type DialogueAction = (dialogue: Dialogue) => void;
+type DialogueAction = ((dialogue: Dialogue) => void) | string | null;
 
 export default class DialogueChoice {
 

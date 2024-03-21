@@ -1,16 +1,17 @@
 import DialogueChoice from "./DialogueChoice";
 import DialogueSpeaker from "./DialogueSpeaker";
-import DialogueSpeech from "./DialogueSpeech";
 
 export default class DialoguePerson {
 
     public speaker: DialogueSpeaker | null;
-    public speech: DialogueSpeech | null;
+    public speech: string | null;
+    public emotion: string | null;
     public choices: DialogueChoice[];
 
-    constructor(speaker?: DialogueSpeaker, speech?: DialogueSpeech, choices?: DialogueChoice[]) {
+    constructor(speaker?: DialogueSpeaker, speech?: string, emotion?: string, choices?: DialogueChoice[]) {
         this.speaker = speaker ?? null;
         this.speech = speech ?? null;
+        this.emotion = emotion ?? null;
         this.choices = choices ?? [];
     }
 
@@ -19,8 +20,13 @@ export default class DialoguePerson {
         return this;
     }
 
-    public setSpeech(speech: DialogueSpeech) {
+    public setSpeech(speech: string) {
         this.speech = speech;
+        return this;
+    }
+
+    public setEmotion(emotion: string) {
+        this.emotion = emotion;
         return this;
     }
 

@@ -3,10 +3,8 @@ import { BaseScene } from "./BaseScene";
 
 const avatars: { [key: string]: string[] } = {
     "Khaled": ["angry", "crying", "facepalm", "happy", "sad", "sighing", "smiling", "stressed", "winking"],
-    "Valentin": []
+    "Valentin": ["angry", "big_wave", "call", "cry", "facepalm", "happy", "hesitate", "idea", "sad", "sight", "smirk", "sweat", "wave", "wink", "yawn"]
 }
-
-import TestGameScene from "./TestGameScene";
 
 export class TitleScene extends BaseScene {
 
