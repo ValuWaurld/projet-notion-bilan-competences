@@ -164,7 +164,7 @@ class GameScene extends BaseScene {
             });
         }
 
-        if (personIndex === 0) {
+        if (personIndex === 0 && person.speaker?.name !== "Narrator") {
             personObject.nextText = this.add.text(this.cameras.main.width / 2, 200, "NEXT", {color: '#000000'}).setInteractive();
             personObject.nextText.on('pointerdown', () => {
                 this.dialogue?.incrementIndex();

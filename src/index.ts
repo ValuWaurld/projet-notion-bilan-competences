@@ -5,6 +5,7 @@ import { Align } from './utils/Images';
 import DeskGameScene from './scenes/DeskGameScene';
 import { noWelcomeDialogue, welcomeDialogue, yesWelcomeDialogue } from './utils/dialogues/WelcomeDialogues';
 import { TitleScene } from './scenes/TitleScene';
+import { getQuestionsDialogue } from './utils/dialogues/QuestionsDialogues';
 
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
@@ -29,12 +30,19 @@ const addScenes = (game: Phaser.Game) => {
     game.scene.add("YesWelcomeGameScene", yesWelcomeGameScene, false);
     const noWelcomeGameScene = new DeskGameScene(noWelcomeDialogue);
     game.scene.add("NoWelcomeGameScene", noWelcomeGameScene, false);
+    const { questionsRootDialogue, answersGameScenes } = getQuestionsDialogue();
+    const questionsGameScene = new DeskGameScene(questionsRootDialogue);
+    game.scene.add("QuestionsGameScene", questionsGameScene, false);
+    for (const answerGameScene of answersGameScenes) {
+        const answerGameSceneInstance = new DeskGameScene(answerGameScene.dialogue);
+        game.scene.add(answerGameScene.gameSceneName, answerGameSceneInstance, false);
+    }
 };
 
 window.onload = () => {
     const game = new Game(config);
     game.scale.autoCenter = Phaser.Scale.CENTER_BOTH;
-    addScenes(game);
     Align.setGame(game);
+    addScenes(game);
     game.scene.start("TitleScene");
 };

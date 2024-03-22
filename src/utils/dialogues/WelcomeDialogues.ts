@@ -11,7 +11,7 @@ export const welcomeDialogue = new Dialogue()
                 new DialoguePerson()
                     .setSpeaker(khaledSpeaker)
                     .setSpeech("Bonjour !")
-                    .setEmotion("stressed"),
+                    .setEmotion("stress"),
                 new DialoguePerson()
                     .setSpeaker(narratorSpeaker)
             ),
@@ -20,7 +20,7 @@ export const welcomeDialogue = new Dialogue()
                 new DialoguePerson()
                     .setSpeaker(khaledSpeaker)
                     .setSpeech("Mais où est Valentin ?")
-                    .setEmotion("stressed"),
+                    .setEmotion("stress"),
                 new DialoguePerson()
                     .setSpeaker(narratorSpeaker)
             ),
@@ -28,7 +28,7 @@ export const welcomeDialogue = new Dialogue()
             .setPeople(
                 new DialoguePerson()
                     .setSpeaker(khaledSpeaker)
-                    .setEmotion("smiling"),
+                    .setEmotion("smile"),
                 new DialoguePerson()
                     .setSpeaker(valentinSpeaker)
                     .setSpeech("Oups, désolé du retard...")
@@ -50,30 +50,19 @@ export const welcomeDialogue = new Dialogue()
             .setPeople(
                 new DialoguePerson()
                     .setSpeaker(narratorSpeaker)
-                    .setSpeech("Réponds par oui ou non.")
+                    .setSpeech("Êtes-vous prêt(e) ?.")
                     .setChoices(
                         new DialogueChoice()
-                            .setAnswer("Yes")
+                            .setAnswer("Oui")
                             .setIncrementAfterAction(true)
-                            .setAction("YesWelcomeGameScene"),
-                        new DialogueChoice()
-                            .setAnswer("No")
-                            .setIncrementAfterAction(true)
-                            .setAction("NoWelcomeGameScene")
+                            .setAction("QuestionsGameScene")
                     ),
                 new DialoguePerson()
                     .setSpeaker(khaledSpeaker)
                     .setEmotion("happy"),
                 new DialoguePerson()
                     .setSpeaker(valentinSpeaker)
-                    .setEmotion("angry")
-            ),
-        new DialogueElement()
-            .setPeople(
-                new DialoguePerson()
-                    .setSpeaker(khaledSpeaker)
-                    .setSpeech("À bientôt !")
-                    .setEmotion("winking")
+                    .setEmotion("happy")
             )
     );
 
