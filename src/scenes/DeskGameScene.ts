@@ -3,8 +3,8 @@ import { GameScene } from "./GameScene";
 
 export default class DeskGameScene extends GameScene {
 
-    constructor(dialogue: Dialogue) {
-        super({ dialogue });
+    constructor(dialogue: Dialogue, endGameScene?: string) {
+        super({ dialogue, endGameScene });
     }
 
     create() {

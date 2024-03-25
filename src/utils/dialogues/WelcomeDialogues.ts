@@ -50,13 +50,26 @@ export const welcomeDialogue = new Dialogue()
             .setPeople(
                 new DialoguePerson()
                     .setSpeaker(narratorSpeaker)
-                    .setSpeech("Êtes-vous prêt(e) ?.")
+                    .setSpeech("Voulez-vous connaître les règles ?")
                     .setChoices(
                         new DialogueChoice()
                             .setAnswer("Oui")
-                            .setIncrementAfterAction(true)
-                            .setAction("QuestionsGameScene")
+                            .setAction("RulesGameScene"),
+                        new DialogueChoice()
+                            .setAnswer("Non")
                     ),
+                new DialoguePerson()
+                    .setSpeaker(khaledSpeaker)
+                    .setEmotion("happy"),
+                new DialoguePerson()
+                    .setSpeaker(valentinSpeaker)
+                    .setEmotion("happy")
+            ),
+        new DialogueElement()
+            .setPeople(
+                new DialoguePerson()
+                    .setSpeaker(narratorSpeaker)
+                    .setSpeech("Bien. C'est parti !"),
                 new DialoguePerson()
                     .setSpeaker(khaledSpeaker)
                     .setEmotion("happy"),

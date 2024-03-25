@@ -39,9 +39,9 @@ export const questions: Question[] = [
         value: "Valentin",
         correct: false,
         khaledResponse: "Incorrect! Valentin is not the best!",
-        khaledEmotion: "sweat",
+        khaledEmotion: "sad",
         valentinResponse: "Incorrect! I'm not the best!",
-        valentinEmotion: "sad"
+        valentinEmotion: "sweat"
       }
     ]
   }

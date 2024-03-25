@@ -3,9 +3,10 @@ import 'phaser';
 // Import other classes
 import { Align } from './utils/Images';
 import DeskGameScene from './scenes/DeskGameScene';
-import { noWelcomeDialogue, welcomeDialogue, yesWelcomeDialogue } from './utils/dialogues/WelcomeDialogues';
+import { welcomeDialogue } from './utils/dialogues/WelcomeDialogues';
 import { TitleScene } from './scenes/TitleScene';
 import { getQuestionsDialogue } from './utils/dialogues/QuestionsDialogues';
+import { getRulesDialogue } from './utils/dialogues/RulesDialogue';
 
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
@@ -24,12 +25,10 @@ export class Game extends Phaser.Game {
 const addScenes = (game: Phaser.Game) => {
     const titleScene = new TitleScene();
     game.scene.add("TitleScene", titleScene, true);
-    const welcomeGameScene = new DeskGameScene(welcomeDialogue);
+    const welcomeGameScene = new DeskGameScene(welcomeDialogue, "QuestionsGameScene");
     game.scene.add("WelcomeGameScene", welcomeGameScene, false);
-    const yesWelcomeGameScene = new DeskGameScene(yesWelcomeDialogue);
-    game.scene.add("YesWelcomeGameScene", yesWelcomeGameScene, false);
-    const noWelcomeGameScene = new DeskGameScene(noWelcomeDialogue);
-    game.scene.add("NoWelcomeGameScene", noWelcomeGameScene, false);
+    const rulesGameScene = new DeskGameScene(getRulesDialogue());
+    game.scene.add("RulesGameScene", rulesGameScene, false);
     const { questionsRootDialogue, answersGameScenes } = getQuestionsDialogue();
     const questionsGameScene = new DeskGameScene(questionsRootDialogue);
     game.scene.add("QuestionsGameScene", questionsGameScene, false);

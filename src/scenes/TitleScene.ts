@@ -2,8 +2,8 @@ import "phaser";
 import { BaseScene } from "./BaseScene";
 
 const avatars: { [key: string]: string[] } = {
-    "Khaled": ["angry", "cry", "facepalm", "happy", "sad", "sigh", "smile", "stress", "wink"],
-    "Valentin": ["angry", "big_wave", "call", "cry", "facepalm", "happy", "hesitate", "idea", "sad", "sigh", "smirk", "sweat", "wave", "wink", "yawn"]
+    "Khaled": ["CV", "angry", "cry", "facepalm", "happy", "sad", "sigh", "smile", "stress", "wink"],
+    "Valentin": ["CV", "angry", "big_wave", "call", "cry", "facepalm", "happy", "hesitate", "idea", "sad", "sigh", "smirk", "sweat", "wave", "wink", "yawn"]
 }
 
 export class TitleScene extends BaseScene {

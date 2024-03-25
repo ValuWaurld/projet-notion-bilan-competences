@@ -12,6 +12,7 @@ const generateSpeechStyleOptions = (personWidth: number) => ({
 
 interface GameSceneOptions extends Phaser.Types.Scenes.SettingsConfig {
     dialogue: Dialogue;
+    endGameScene?: string;
 }
 
 interface GameSceneObjects {
@@ -27,18 +28,25 @@ class GameScene extends BaseScene {
 
     public dialogue: Dialogue | null = null;
     public previousGameScene: GameScene | null = null;
+    public endGameScene: string | null = null;
     protected oldIndex = 0;
 
     // Variables for showing current dialogue
     protected peopleObjects: GameSceneObjects[] = [];
+    protected cvObjects: Phaser.GameObjects.Image[] = [];
     protected backgroundFrontImage: Phaser.GameObjects.Image | null = null;
 
     constructor(options?: string | GameSceneOptions | undefined) {
         super(options);
 
-        if (options !== undefined && typeof options !== 'string' && 'dialogue' in options && options.dialogue instanceof Dialogue) {
-            this.dialogue = options.dialogue;
-            this.dialogue?.setGameScene(this);
+        if (options !== undefined && typeof options !== "string") {
+            if ('dialogue' in options && options.dialogue instanceof Dialogue) {
+                this.dialogue = options.dialogue;
+                this.dialogue?.setGameScene(this);
+            }
+            if ('endGameScene' in options && typeof options.endGameScene === "string") {
+                this.endGameScene = options.endGameScene;
+            }
         }
     }
 
@@ -64,6 +72,9 @@ class GameScene extends BaseScene {
         personObjects.speakerName?.destroy();
         personObjects.choices?.forEach((choice) => choice.destroy());
         personObjects.nextText?.destroy();
+        for (const cvObject of this.cvObjects) {
+            cvObject.destroy();
+        }
     }
 
     update() {
@@ -80,7 +91,13 @@ class GameScene extends BaseScene {
         const currentElement = this.dialogue.getCurrentElement();
         if (currentElement === undefined) {
             this.scene.stop();
-            this.previousGameScene?.scene.resume();
+            if (this.previousGameScene !== null) {
+                this.previousGameScene.scene.resume();
+            } else if (this.endGameScene !== null) {
+                const nextGameScene = this.game.scene.keys[this.endGameScene];
+                if (!nextGameScene) throw new Error("Scene not found");
+                nextGameScene.scene.start();
+            }
             return;
         }
 
@@ -93,6 +110,8 @@ class GameScene extends BaseScene {
 
         this.backgroundFrontImage = this.add.image(0, 0, "OfficeBackgroundFront").setOrigin(0, 0);
         Align.scaleToGame(this.backgroundFrontImage, 1, false);
+
+        this.showCV();
 
         console.log("Showing element number " + this.dialogue?.currentIndex);
     }
@@ -137,8 +156,8 @@ class GameScene extends BaseScene {
         }
 
         if (person.choices.length !== 0) {
-            const choiceXOffset = this.cameras.main.width * 0.2;
-            const choiceWidth = this.cameras.main.width * 0.6 / person.choices.length;
+            const choiceXOffset = this.cameras.main.width * 0.05;
+            const choiceWidth = this.cameras.main.width * 0.9 / person.choices.length;
             personObject.choices = person.choices.map((choice, i) => {
                 const choiceText = this.add.text(choiceXOffset + i * choiceWidth + choiceWidth / 2, 85, choice.answer ?? "", {color: '#FFFFFF'}).setInteractive();
                 choiceText.on('pointerdown', () => {
@@ -164,7 +183,7 @@ class GameScene extends BaseScene {
             });
         }
 
-        if (personIndex === 0 && person.speaker?.name !== "Narrator") {
+        if (personIndex === 0 && person.choices.length === 0) {
             personObject.nextText = this.add.text(this.cameras.main.width / 2, 200, "NEXT", {color: '#000000'}).setInteractive();
             personObject.nextText.on('pointerdown', () => {
                 this.dialogue?.incrementIndex();
@@ -173,6 +192,28 @@ class GameScene extends BaseScene {
         }
 
         this.peopleObjects.push(personObject);
+    }
+
+    showCV() {
+        const names = ["Khaled", "Valentin"];
+        const cameraWidth = this.cameras.main.width;
+        const cameraHeight = this.cameras.main.height;
+        for (let nameIndex = 0; nameIndex < names.length; nameIndex++) {
+            const name = names[nameIndex];
+            console.log("Showing CV for " + name);
+            const cvImage = this.add.image(cameraWidth * 0.05 + (nameIndex * 0.9 * cameraWidth), cameraHeight * 0.9, name + "_CV").setOrigin(nameIndex, 1);
+            Align.scaleToGame(cvImage, 0.1, true);
+
+            cvImage.setInteractive();
+            cvImage.on('pointerover', function () {
+                Align.scaleToGame(cvImage, 0.7, true);
+            });
+            cvImage.on('pointerout', function () {
+                Align.scaleToGame(cvImage, 0.1, true);
+            });
+
+            this.cvObjects.push(cvImage);
+        }
     }
 
 }

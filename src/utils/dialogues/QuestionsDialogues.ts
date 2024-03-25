@@ -35,31 +35,30 @@ function getQuestionDialogue(question: Question, qIndex: number, answersGameScen
 function getChoiceDialogue(answer: Answer, qIndex: number, aIndex: number, answersGameScenes: AnswerWithDialogue[] = []) {
     const answerGameSceneName = `Answer${qIndex}_${aIndex}GameScene`;
     const randomIndex = Math.floor(Math.random() * 2);
-    const [speakerA, speakerB] = randomIndex === 0 ? [khaledSpeaker, valentinSpeaker] : [valentinSpeaker, khaledSpeaker];
-    const [emotionA, emotionB] = randomIndex === 0 ? [answer.khaledEmotion, answer.valentinEmotion] : [answer.valentinEmotion, answer.khaledEmotion];
-    const [responseA, responseB] = randomIndex === 0 ? [answer.khaledResponse, answer.valentinResponse] : [answer.valentinResponse, answer.khaledResponse];
 
     const answerDialogue = new Dialogue()
         .addElements(
             new DialogueElement()
                 .setPeople(
                     new DialoguePerson()
-                        .setSpeaker(speakerA)
-                        .setSpeech(responseA)
-                        .setEmotion(emotionA),
+                        .setSpeaker(khaledSpeaker)
+                        .setSpeech(randomIndex === 0 ? answer.khaledResponse : "")
+                        .setEmotion(answer.khaledEmotion),
                     new DialoguePerson()
-                        .setSpeaker(speakerB)
-                        .setEmotion(emotionB)
+                        .setSpeaker(valentinSpeaker)
+                        .setSpeech(randomIndex === 1 ? answer.valentinResponse : "")
+                        .setEmotion(answer.valentinEmotion)
                 ),
             new DialogueElement()
                 .setPeople(
                     new DialoguePerson()
-                        .setSpeaker(speakerA)
-                        .setEmotion(emotionA),
+                        .setSpeaker(khaledSpeaker)
+                        .setSpeech(randomIndex === 1 ? answer.khaledResponse : "")
+                        .setEmotion(answer.khaledEmotion),
                     new DialoguePerson()
-                        .setSpeaker(speakerB)
-                        .setSpeech(responseB)
-                        .setEmotion(emotionB)
+                        .setSpeaker(valentinSpeaker)
+                        .setSpeech(randomIndex === 0 ? answer.valentinResponse : "")
+                        .setEmotion(answer.valentinEmotion)
                 )
         );
 
