@@ -1,10 +1,11 @@
+import {Game} from "../index";
 import Dialogue from "../utils/structures/Dialogue";
 import { GameScene } from "./GameScene";
 
 export default class DeskGameScene extends GameScene {
 
-    constructor(dialogue: Dialogue, endGameScene?: string) {
-        super({ dialogue, endGameScene });
+    constructor(customGame: Game, dialogue: Dialogue, endGameScene?: string) {
+        super(customGame, { dialogue, endGameScene });
     }
 
     create() {

@@ -7,7 +7,6 @@ import DialoguePerson from "../structures/DialoguePerson";
 
 export function getQuestionsDialogue() {
     const randomizedQuestions = [...questions].sort(() => Math.random() - 0.5);
-    console.log(randomizedQuestions);
     const answersGameScenes: AnswerWithDialogue[] = [];
     const questionsRootDialogue = new Dialogue()
         .addElements(

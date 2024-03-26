@@ -1,22 +1,32 @@
 import 'phaser';
-import { BaseScene } from './BaseScene';
+import {Game} from "../index";
+import BaseScene from './BaseScene';
 
-export class EndScene extends BaseScene {
-    
-    constructor() {
-        super({ key: 'EndScene' });
+export default class EndScene extends BaseScene {
+
+    constructor(customGame: Game) {
+        super(customGame);
     }
 
-    determineJob(cvData: any, interviewResponses: any, moralChoices: any) {
-        // Logique pour analyser les réponses et les choix moraux
-        // Par exemple, si certaines réponses ou choix moraux correspondent à un métier spécifique, suggérez ce métier
-        // Cette partie nécessite une logique personnalisée en fonction de vos critères de sélection de métier
-        return 'Métier suggéré en fonction de l\'analyse'; // Exemple
-    }    
-    
-    create(data: { cvData: any; interviewResponses: any; moralChoices: any; }) {
-        let suggestedJob = this.determineJob(data.cvData, data.interviewResponses, data.moralChoices);
-        this.add.text(100, 150, `Métier suggéré: ${suggestedJob}`, { color: '#000', fontSize: '20px' });
-        let jobImage = this.add.sprite(200, 200, 'jobImage');
+    create() {
+        const endText = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, " Merci d'avoir joué !\n\nLa page se rechargera\n  dans 5 secondes.", {
+            fontSize: "32px",
+            color: "#000000",
+            backgroundColor: "#ffffff",
+            padding: {
+                left: 20,
+                right: 20,
+                top: 10,
+                bottom: 10
+            }
+        }).setOrigin(0.5, 0.5);
+        for (const scene of this.customGame.scene.getScenes(false)) {
+            if (scene.scene.key === "EndScene") continue;
+            scene.scene.stop();
+        }
+        setTimeout(() => {
+            window.location.reload();
+        }, 5_000);
     }
+
 }

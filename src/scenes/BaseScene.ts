@@ -1,9 +1,12 @@
 import "phaser";
+import {Game} from '../index';
 
-export class BaseScene extends Phaser.Scene {
+export default class BaseScene extends Phaser.Scene {
+    public customGame: Game;
 
-    constructor(options?: string | Phaser.Types.Scenes.SettingsConfig) {
+    constructor(customGame: Game, options?: string | Phaser.Types.Scenes.SettingsConfig) {
         super(options);
+        this.customGame = customGame;
     }
 
 }

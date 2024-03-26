@@ -1,11 +1,16 @@
 import 'phaser';
-import {BaseScene} from './BaseScene';
+import {Game} from "../index";
+import BaseScene from './BaseScene';
 import Dialogue from '../utils/structures/Dialogue';
 import {Align} from '../utils/Images';
 import DialogueElement from '~/utils/structures/DialogueElement';
 
 const generateSpeechStyleOptions = (personWidth: number) => ({
-    color: '#FFFFFF',
+    fontFamily: 'Arial',
+    fontSize: '1.5rem',
+    fontWeight: 'normal',
+    color: '#eee',
+    lineSpacing: 5,
     wordWrap: {width: personWidth * 0.8, useAdvancedWrap: true},
     align: 'center'
 })
@@ -25,7 +30,6 @@ interface GameSceneObjects {
 }
 
 class GameScene extends BaseScene {
-
     public dialogue: Dialogue | null = null;
     public previousGameScene: GameScene | null = null;
     public endGameScene: string | null = null;
@@ -36,8 +40,8 @@ class GameScene extends BaseScene {
     protected cvObjects: Phaser.GameObjects.Image[] = [];
     protected backgroundFrontImage: Phaser.GameObjects.Image | null = null;
 
-    constructor(options?: string | GameSceneOptions | undefined) {
-        super(options);
+    constructor(customGame: Game, options?: string | GameSceneOptions | undefined) {
+        super(customGame, options);
 
         if (options !== undefined && typeof options !== "string") {
             if ('dialogue' in options && options.dialogue instanceof Dialogue) {
@@ -82,6 +86,7 @@ class GameScene extends BaseScene {
             this.removeOldObjects();
             this.oldIndex = this.dialogue.currentIndex;
             this.showCurrentDialogue();
+            return;
         }
     }
 
@@ -91,9 +96,13 @@ class GameScene extends BaseScene {
         const currentElement = this.dialogue.getCurrentElement();
         if (currentElement === undefined) {
             this.scene.stop();
-            if (this.previousGameScene !== null) {
+            if (this.previousGameScene !== null && this.previousGameScene.scene.key !== "ChooseGameScene") {
+                console.log("Resuming previous scene : " + this.previousGameScene.scene.key)
                 this.previousGameScene.scene.resume();
-            } else if (this.endGameScene !== null) {
+                return;
+            }
+            if (this.endGameScene !== null) {
+                console.log("Changing scene to end scene : " + this.endGameScene)
                 const nextGameScene = this.game.scene.keys[this.endGameScene];
                 if (!nextGameScene) throw new Error("Scene not found");
                 nextGameScene.scene.start();
@@ -104,7 +113,7 @@ class GameScene extends BaseScene {
         const narrator = currentElement.people.find(person => person.speaker?.name === "Narrator");
         let hasNarratorTalked = false;
         for (let peopleIndex = 0; peopleIndex < currentElement.people.length; peopleIndex++) {
-            this.showPersonDialogue(currentElement, peopleIndex, !!narrator, !narrator?.speech, hasNarratorTalked);
+            this.showPersonDialogue(currentElement, peopleIndex, !!narrator, !narrator?.speech, hasNarratorTalked && currentElement.people.length > 2);
             if (narrator && currentElement.people[peopleIndex] === narrator) hasNarratorTalked = true;
         }
 
@@ -116,7 +125,7 @@ class GameScene extends BaseScene {
         console.log("Showing element number " + this.dialogue?.currentIndex);
     }
 
-    showPersonDialogue(currentElement: DialogueElement, personIndex: number, isThereNarrator: boolean, isNarratorSilent: boolean, hasNarratorTalked: boolean) {
+    showPersonDialogue(currentElement: DialogueElement, personIndex: number, isThereNarrator: boolean, isNarratorSilent: boolean, shouldPersonBeMoved: boolean) {
         const nbRealPeople = currentElement.people.length - (isThereNarrator && !isNarratorSilent ? 1 : 0);
         const personWidth = this.cameras.main.width / nbRealPeople;
         const person = currentElement.people[personIndex];
@@ -130,18 +139,19 @@ class GameScene extends BaseScene {
         };
         console.log(person.speaker?.name, person.speech, person.emotion, person.choices, nbRealPeople)
 
-        const xPosition = (personIndex - (hasNarratorTalked ? 1 : 0)) * personWidth;
+        const xPosition = (personIndex - (shouldPersonBeMoved ? 1 : 0)) * personWidth;
         let background = this.add.graphics({fillStyle: {color: 0x000000, alpha: 0.5}});
 
         if (person.speaker?.name === "Narrator") {
             if (person.speech) {
                 personObject.speechBackground = background.fillRect(this.cameras.main.width * 0.05, 30, this.cameras.main.width * 0.9, 100);
-                personObject.speechText = this.add.text(this.cameras.main.width / 2, person.choices.length === 0 ? 75 : 45, person.speech, generateSpeechStyleOptions(this.cameras.main.width));
-                personObject.speechText.setOrigin(0.5, 0);
+                const speechTextStr = person.speech.replace("%score%", this.customGame.getScore().toString());
+                personObject.speechText = this.add.text(this.cameras.main.width / 2, person.choices.length === 0 ? 75 : 55, speechTextStr, generateSpeechStyleOptions(this.cameras.main.width));
+                personObject.speechText.setOrigin(0.5, 0.5);
             }
         } else {
             // personObject.speakerName = this.add.text(xPosition + personWidth / 2, 35, person.speaker?.name ?? "", generateSpeechStyleOptions(personWidth));
-            // personObject.speakerName.setOrigin(0.5, 0);
+            // personObject.speakerName.setOrigin(0.5, 0.5);
             if (!person.emotion && person.speaker?.name != "Narrator") throw new Error(`No emotion found (speaker: ${person.speaker?.name})`);
             if (person.emotion) {
                 const imageName = person.speaker?.name + "_" + person.emotion;
@@ -151,7 +161,7 @@ class GameScene extends BaseScene {
             if (person.speech) {
                 personObject.speechBackground = background.fillRect(xPosition + personWidth * 0.05, 30, personWidth * 0.9, 100);
                 personObject.speechText = this.add.text(xPosition + personWidth / 2, 75, person.speech, generateSpeechStyleOptions(personWidth));
-                personObject.speechText.setOrigin(0.5, 0);
+                personObject.speechText.setOrigin(0.5, 0.5);
             }
         }
 
@@ -159,7 +169,8 @@ class GameScene extends BaseScene {
             const choiceXOffset = this.cameras.main.width * 0.05;
             const choiceWidth = this.cameras.main.width * 0.9 / person.choices.length;
             personObject.choices = person.choices.map((choice, i) => {
-                const choiceText = this.add.text(choiceXOffset + i * choiceWidth + choiceWidth / 2, 85, choice.answer ?? "", {color: '#FFFFFF'}).setInteractive();
+                const choiceText = this.add.text(choiceXOffset + i * choiceWidth + choiceWidth / 2, 85, choice.answer ?? "", generateSpeechStyleOptions(choiceWidth))
+                    .setInteractive({useHandCursor: true});
                 choiceText.on('pointerdown', () => {
                     if (this.dialogue === null) return;
                     if (choice.action) {
@@ -184,7 +195,24 @@ class GameScene extends BaseScene {
         }
 
         if (personIndex === 0 && person.choices.length === 0) {
-            personObject.nextText = this.add.text(this.cameras.main.width / 2, 200, "NEXT", {color: '#000000'}).setInteractive();
+            const nextButtonStyle = {
+                fontFamily: 'Arial, sans-serif',
+                fontSize: '1.5rem',
+                fontWeight: 'bold',
+                color: '#fff',
+                backgroundColor: '#28a745', // Green color for "NEXT" button
+                padding: {
+                    x: 20,
+                    y: 10
+                },
+                borderRadius: 5,
+                cursor: 'pointer',
+                textTransform: 'uppercase',
+                letterSpacing: 1
+            };
+            personObject.nextText = this.add.text(this.cameras.main.centerX, this.cameras.main.height * 0.4, "SUIVANT", nextButtonStyle)
+                .setOrigin(0.5, 0.5)
+                .setInteractive({useHandCursor: true});
             personObject.nextText.on('pointerdown', () => {
                 this.dialogue?.incrementIndex();
                 console.log("Incremented dialogue index");

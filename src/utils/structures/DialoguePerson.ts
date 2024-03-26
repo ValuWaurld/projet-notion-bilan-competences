@@ -1,5 +1,6 @@
 import DialogueChoice from "./DialogueChoice";
 import DialogueSpeaker from "./DialogueSpeaker";
+import {KhaledEmotions, ValentinEmotions} from "~/scenes/TitleScene";
 
 export default class DialoguePerson {
 
@@ -8,7 +9,7 @@ export default class DialoguePerson {
     public emotion: string | null;
     public choices: DialogueChoice[];
 
-    constructor(speaker?: DialogueSpeaker, speech?: string, emotion?: string, choices?: DialogueChoice[]) {
+    constructor(speaker?: DialogueSpeaker, speech?: string, emotion?: KhaledEmotions | ValentinEmotions, choices?: DialogueChoice[]) {
         this.speaker = speaker ?? null;
         this.speech = speech ?? null;
         this.emotion = emotion ?? null;
@@ -25,7 +26,7 @@ export default class DialoguePerson {
         return this;
     }
 
-    public setEmotion(emotion: string) {
+    public setEmotion(emotion: KhaledEmotions | ValentinEmotions) {
         this.emotion = emotion;
         return this;
     }
