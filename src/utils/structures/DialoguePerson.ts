@@ -1,6 +1,6 @@
 import DialogueChoice from "./DialogueChoice";
 import DialogueSpeaker from "./DialogueSpeaker";
-import {KhaledEmotions, ValentinEmotions} from "~/scenes/TitleScene";
+import {KhaledEmotions, ValentinEmotions} from "../../scenes/TitleScene";
 
 export default class DialoguePerson {
 
